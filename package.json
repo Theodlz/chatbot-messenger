@@ -1,0 +1,19 @@
+{
+  "name": "td3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "matcher": "^5.0.0",
+    "request": "^2.88.2",
+    "xregexp": "^5.1.0"
+  }
+}
