@@ -64,6 +64,7 @@ class FBeamer{
     messageHandler(obj){
       let sender = obj.sender.id;
       let message = obj.message;
+      console.log(message.nlp);
       if(message.text){
         let obj = {
           sender,
@@ -128,6 +129,7 @@ class FBeamer{
     }
 
     txt(id, text, messaging_type = 'RESPONSE'){
+      
       let obj = {
         messaging_type,
         recipient:{
@@ -156,7 +158,6 @@ class FBeamer{
           }
         }
       }
-      console.log(obj.message.attachment.payload)
       return this.sendMessage(obj);
     }
 }

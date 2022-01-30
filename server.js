@@ -40,7 +40,7 @@ server.post('/fb', (req, res, next) => {
 
       */
       matcher(data.content, cb => {
-        console.log(cb)
+        console.log(cb);
         switch(cb.intent){
             case 'Hello':
                 f.txt(data.sender, 'Hello ! What do you want to know ?');
