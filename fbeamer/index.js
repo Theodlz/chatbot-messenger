@@ -64,7 +64,6 @@ class FBeamer{
     messageHandler(obj){
       let sender = obj.sender.id;
       let message = obj.message;
-      console.log(message.nlp);
       if(message.text){
         let obj = {
           sender,
