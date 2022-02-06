@@ -33,7 +33,6 @@ server.post('/fb', (req, res, next) => {
     data = f.messageHandler(data);
     try{
       let tmdbData = await tmdb(nlp);
-      console.log(tmdbData);
       for (let i=0; i< tmdbData.length; i++) {
         if(tmdbData[i].type === 'text') {
           await f.txt(data.sender, tmdbData[i].content);

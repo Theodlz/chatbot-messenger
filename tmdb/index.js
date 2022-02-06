@@ -76,7 +76,7 @@ module.exports = nlpData => {
           movieData = movieData.data.results[0]
           let response = [
             {type : 'image', content: 'https://image.tmdb.org/t/p/w500'+movieData.poster_path},
-            {type : 'text', content: movieData.title + ', released in '+movieData.release_date},
+            {type : 'text', content: movieData.title + ', released on the '+movieData.release_date},
             {type : 'text', content: "Overview: "+movieData.overview}
             ]
           resolve(response);
@@ -96,6 +96,23 @@ module.exports = nlpData => {
           let response = [
             {type : 'image', content: 'https://image.tmdb.org/t/p/w500'+directorData.profile_path},
             {type : 'text', content: movieData.title+' was directed by: '+ directorData.name},
+            ]
+          resolve(response);
+        } catch(error) {
+          reject(error);
+        }
+      }
+
+      if(intent === 'releaseYear') {
+        let movie = extractEntity(nlpData, 'movie:movie');
+        console.log(movie);
+
+        try {
+          let movieData = await getMovieData(movie);
+          movieData = movieData.data.results[0]
+          let response = [
+            {type : 'image', content: 'https://image.tmdb.org/t/p/w500'+movieData.poster_path},
+            {type : 'text', content: movieData.title + ' was released on the '+movieData.release_date},
             ]
           resolve(response);
         } catch(error) {
