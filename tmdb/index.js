@@ -18,6 +18,7 @@ const getMovieData = (movie, releaseYear = null) => {
       
     } catch(e) {
       console.log(e)
+      resolve(null);
     }
   })
 }
@@ -36,26 +37,31 @@ const getDirector = (movieid) => {
       
     } catch(e) {
       console.log(e)
+      resolve(null);
     }
   })
 }
 
 const extractEntity = (nlp, entity) => {
-  if (entity === 'intent') {
-    if (nlp.intents[0]['confidence']>=0.6){
-      return nlp.intents[0]['name'];
+  try {
+    if (entity === 'intent') {
+      if (nlp.intents[0]['confidence']>=0.6){
+        return nlp.intents[0]['name'];
+      }
+      else {
+        return null;
+      }
     }
     else {
-      return null;
-    }
-  }
-  else {
-    if(nlp.entities[entity] && nlp.entities[entity][0].confidence>=0.8){
-      return nlp.entities[entity][0].value;
-    } else {
-      return null;
-    }
+      if(nlp.entities[entity] && nlp.entities[entity][0].confidence>=0.8){
+        return nlp.entities[entity][0].value;
+      } else {
+        return null;
+      }
 
+    }
+  } catch(e) {
+    return 'error';
   }
   
 }
@@ -119,6 +125,12 @@ module.exports = nlpData => {
           reject(error);
         }
       }
+     if(intent == 'error') {
+       resolve([{
+        type: 'text',
+        content: "Oups!  We are facing issues and are fixing it. Please come back later !!"
+      }]);
+     }
       
     } else {
       resolve([{
