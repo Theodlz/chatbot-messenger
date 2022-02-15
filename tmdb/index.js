@@ -45,28 +45,18 @@ const getDirector = (movieid) => {
 const extractEntity = (nlp, entity) => {
   try {
     if (entity === 'intent') {
-      try {
-        if (nlp.intents[0]['confidence']>=0.6){
-          return nlp.intents[0]['name'];
-        }
-        else {
-          return null;
-        }
-       } catch(e) {
-          console.log(e);
-          return 'error';
-         }
+      if (nlp.intents[0]['confidence']>=0.6){
+        return nlp.intents[0]['name'];
+      }
+      else {
+        return null;
+      }
     }
     else {
-      try {
-        if(nlp.entities[entity] && nlp.entities[entity][0].confidence>=0.8){
+      if(nlp.entities[entity] && nlp.entities[entity][0].confidence>=0.8){
         return nlp.entities[entity][0].value;
       } else {
         return null;
-      }
-      } catch (e) {
-        console.log(e);
-        return 'error';
       }
     }
   } catch(e) {
@@ -97,7 +87,12 @@ module.exports = nlpData => {
             ]
           resolve(response);
         } catch(error) {
-          reject(error);
+          console.log(error);
+          resolve([{
+          type: 'text',
+          content: "Oups!  We did not find any match for that movie. Pleas try another one, or try again later !"
+      }]);
+          
         }
       }
       if(intent === 'director') {
@@ -115,7 +110,11 @@ module.exports = nlpData => {
             ]
           resolve(response);
         } catch(error) {
-          reject(error);
+            console.log(error);
+            resolve([{
+            type: 'text',
+          content: "Oups!  We did not find any match for that movie. Pleas try another one, or try again later !"
+        }]);
         }
       }
 
@@ -132,7 +131,11 @@ module.exports = nlpData => {
             ]
           resolve(response);
         } catch(error) {
-          reject(error);
+            console.log(error);
+            resolve([{
+            type: 'text',
+          content: "Oups!  We did not find any match for that movie. Pleas try another one, or try again later !"
+        }]);
         }
       }
      if(intent == 'error') {
