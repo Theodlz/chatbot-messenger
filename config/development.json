@@ -1,7 +1,7 @@
 {
     "FB": {
-        "pageAccessToken": "EAAGzcKZA2j9QBAKx7UlUOgUsQnSYZBGNlAZCQLpVKmFvcS3hj8WLw3jQaz4mGk0e9NWJXpVBq27xOXh7c9vyVNx6eiGrnA4AtslZAvwz6b2ZAD26oQOHuPWHZCzGUZA2nmhPTksKOtioamsALTrIHlajZB7dGScME9PJZAF6zqQEiLbEe6PHH3cvO",
-        "VerifyToken": "852e560e9a0e5bba3d96da71b70db2796a92b3135f4d0d2059b7a20e9cb68af8f3584bb0da6c83dd967a6393571ef4d0064c7d5bea623e6bbd0a3d54d1e65227",
-        "appSecret": "3809d20e88a4c64220560f7e37a48480"
+        "pageAccessToken": "",
+        "VerifyToken": "",
+        "appSecret": ""
     }
 }
