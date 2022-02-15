@@ -17,7 +17,7 @@ const client = new Wit({accessToken: witToken});
 
 
 
-const f = new FBeamer(config.FB);
+const f = new FBeamer(FB);
 server.post('/fb', bodyparser.json({
   verify: f.verifySignature.call(f)
   }));
