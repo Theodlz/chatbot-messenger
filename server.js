@@ -2,11 +2,10 @@
 
 const express = require('express');
 const bodyparser = require('body-parser');
-const { FB } = require('./config');
+const { FB, witToken } = require('./config');
 const server = express();
 const PORT = process.env.PORT || 3000;
 
-const config = require('./config');
 const FBeamer = require('./fbeamer');
 
 const matcher = require('./matcher');
@@ -14,7 +13,7 @@ const weather = require("./weather");
 const tmdb = require("./tmdb");
 
 const {Wit, log} = require('node-wit');
-const client = new Wit({accessToken: 'K4UHQASK3QLEKSFWZVRJXDVYXRD4IOVQ'});
+const client = new Wit({accessToken: witToken});
 
 
 
