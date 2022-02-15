@@ -61,6 +61,7 @@ const extractEntity = (nlp, entity) => {
 
     }
   } catch(e) {
+    console.log(e);
     return 'error';
   }
   
