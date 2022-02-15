@@ -45,20 +45,29 @@ const getDirector = (movieid) => {
 const extractEntity = (nlp, entity) => {
   try {
     if (entity === 'intent') {
-      if (nlp.intents[0]['confidence']>=0.6){
-        return nlp.intents[0]['name'];
-      }
-      else {
-        return null;
-      }
+      try {
+        if (nlp.intents[0]['confidence']>=0.6){
+          return nlp.intents[0]['name'];
+        }
+        else {
+          return null;
+        }
+       } catch(e) {
+          console.log(e);
+          return 'error';
+         }
     }
     else {
-      if(nlp.entities[entity] && nlp.entities[entity][0].confidence>=0.8){
+      try {
+        if(nlp.entities[entity] && nlp.entities[entity][0].confidence>=0.8){
         return nlp.entities[entity][0].value;
       } else {
         return null;
       }
-
+      } catch (e) {
+        console.log(e);
+        return 'error';
+      }
     }
   } catch(e) {
     console.log(e);
