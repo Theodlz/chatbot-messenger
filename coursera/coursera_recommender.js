@@ -8,11 +8,11 @@ const {addUpdateCourse} = require('./coursera_api.js');
 // function to save user to users.json
 async function saveUsers(users) {
     //if file doesn't exist, create it
-    if (!fs.existsSync('./data/users.json')) {
+    if (!fs.existsSync('./coursera/data/users.json')) {
         //create empty file
-        fs.writeFileSync('./data/users.json', '[]');
+        fs.writeFileSync('./coursera/data/users.json', '[]');
     }
-    fs.writeFileSync('./data/users.json', JSON.stringify(users, '', 2));
+    fs.writeFileSync('./coursera/data/users.json', JSON.stringify(users, '', 2));
 }
 
 
@@ -112,8 +112,8 @@ async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
             // update user's list of courses
             let user = await addUpdateUser(id, [courseName], users);
             // find similar courses
-            let recommandations = await findSimilarCourses(user.courses, courses, n);
-            return {"status": 200, "message": "Course added and recommandation's given", "recommandation": recommandations};
+            let recommendations = await findSimilarCourses(user.courses, courses, n);
+            return {"status": 200, "message": "Course added and recommendation's given", "recommendation": recommendations};
 
         } else {
             return newCourse;
@@ -122,8 +122,8 @@ async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
         // update user's list of courses
         let user = await addUpdateUser(id, [courseName], users);
         // find similar courses
-        let recommandations = await findSimilarCourses(user.courses, courses, n);
-        return {"status": 200, "message": "Course added and recommandations given", "recommandations": recommandations};
+        let recommendations = await findSimilarCourses(user.courses, courses, n);
+        return {"status": 200, "message": "Course added and recommendations given", "recommendations": recommendations};
     }
 
 }

@@ -3,9 +3,8 @@
 const fs = require('fs');
 
 const {recommendFromCourseAndUser} = require('./coursera_recommender.js');
-
-const users = JSON.parse(fs.readFileSync('./data/users.json'));
-const courses = JSON.parse(fs.readFileSync('./data/courses.json'));
+const users = JSON.parse(fs.readFileSync('./coursera/data/users.json'));
+const courses = JSON.parse(fs.readFileSync('./coursera/data/courses.json'));
 
 const extractEntity = (nlp, entity) => {
     try {
@@ -39,7 +38,8 @@ module.exports = (userID, nlpData) => {
             console.log(courseName);
     
             try {
-              let result = await recommend(userID, courseName, 5, courses, users);
+              let result = await recommendFromCourseAndUser(userID, courseName, 5, courses, users);
+              console.log(result);
               if(result.status === 200) {
                   // fill an array with the courses
                     let response = [

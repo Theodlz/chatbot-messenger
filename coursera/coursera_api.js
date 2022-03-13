@@ -86,7 +86,7 @@ async function reorderCourse(course) {
 function saveData(data) {
     // create a json file
     // write the data to the json file
-    fs.writeFile('./data/courses.json', JSON.stringify(data, null, 2), function (err) {
+    fs.writeFile('./coursera/data/courses.json', JSON.stringify(data, null, 2), function (err) {
         if (err) {
             console.log(err);
         }

@@ -9,8 +9,6 @@ if(process.env.NODE_ENV === 'production') {
         },
         witToken: process.env.WIT_TOKEN,
 
-        TMBD: process.env.TMDB
-
     }
 } else {
     module.exports = require('./development.json');
