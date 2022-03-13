@@ -8,9 +8,8 @@ const PORT = process.env.PORT || 3000;
 
 const FBeamer = require('./fbeamer');
 
-const matcher = require('./matcher');
-const weather = require("./weather");
-const tmdb = require("./tmdb");
+const coursera = require("./coursera");
+
 
 const {Wit, log} = require('node-wit');
 const client = new Wit({accessToken: witToken});
@@ -31,13 +30,13 @@ server.post('/fb', (req, res, next) => {
     let nlp = await client.message(data.message.text);
     data = f.messageHandler(data);
     try{
-      let tmdbData = await tmdb(nlp);
-      for (let i=0; i< tmdbData.length; i++) {
-        if(tmdbData[i].type === 'text') {
-          await f.txt(data.sender, tmdbData[i].content);
+      let courseraData = await coursera(data.sender, nlp);
+      for (let i=0; i< courseraData.length; i++) {
+        if(courseraData[i].type === 'text') {
+          await f.txt(data.sender, courseraData[i].content);
         }
-        if(tmdbData[i].type === 'image') {
-          await f.img(data.sender, tmdbData[i].content);
+        if(courseraData[i].type === 'image') {
+          await f.img(data.sender, courseraData[i].content);
         }
       } 
       
