@@ -35,8 +35,11 @@ server.post('/fb', (req, res, next) => {
         if(courseraData[i].type === 'text') {
           await f.txt(data.sender, courseraData[i].content);
         }
-        if(courseraData[i].type === 'image') {
+        else if(courseraData[i].type === 'image') {
           await f.img(data.sender, courseraData[i].content);
+        }
+        else if(courseraData[i].type === 'web_url') {
+          await f.web_url(data.sender, courseraData[i].title, courseraData[i].url, courseraData[i].image_url);
         }
       } 
       

@@ -22,14 +22,20 @@ async function addUpdateUser(id, courses, users) {
     var user = users.find(function(user) {
         return user.id === id;
     });
-    if (user) {
+    if (user && courses.length >0) {
         user.courses = Array.from(new Set(user.courses.concat(courses)));
-    } else {
+    } else if (user == null && courses.length > 0){
         user = {
             "id": id,
             "courses": courses
         };
         users.push(user);
+    } else if (user == null) {
+      user = {
+        "id": id,
+        "courses": []
+      }
+      users.push(user);
     }
     saveUsers(users);
     return user;
@@ -94,7 +100,17 @@ function findSimilarCourses(courseList, courses, n) {
         return b.value - a.value;
     }).slice(courseList.length, n+courseList.length).map(e => e.index);
     let names = indices.map(i => courses[i].name);
-    return names;
+    let urls = indices.map(i => courses[i].url);
+    let image_urls = indices.map(i => courses[i].photoUrl);
+    let courseInfo = []
+    for(let i=0; i<names.length; i++) {
+      courseInfo[i] = {
+        'name': names[i],
+        'url': urls[i],
+        'image_url': image_urls[i]
+      }
+    }
+    return courseInfo;
 }
 
 async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
@@ -113,7 +129,7 @@ async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
             let user = await addUpdateUser(id, [courseName], users);
             // find similar courses
             let recommendations = await findSimilarCourses(user.courses, courses, n);
-            return {"status": 200, "message": "Course added and recommendation's given", "recommendation": recommendations};
+            return {"status": 200, "message": "Course added and recommendation's given", "recommendations": recommendations};
 
         } else {
             return newCourse;
@@ -128,7 +144,24 @@ async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
 
 }
 
+
+async function recommendFromUser(id, n, courses, users) {
+    // retrieve courses history of the user
+    let user = await addUpdateUser(id, [], users);
+    // find similar courses
+  if(user.courses.length>0) {
+    let recommendations = await findSimilarCourses(user.courses, courses, n);
+    return {"status": 200, "message": "Course added and recommendations given", "recommendations": recommendations};
+  } else {
+    return {"status": 400, "message": "You don't have any courses in your history! if you want to get recommendations, tell us at least one course you liked on Coursera"};
+  }
+    
+
+}
+
+
 // export the function recommend
 module.exports = {
-    recommendFromCourseAndUser
+    recommendFromCourseAndUser,
+    recommendFromUser
 };

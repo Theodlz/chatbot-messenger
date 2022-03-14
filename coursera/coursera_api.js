@@ -3,7 +3,7 @@
 // and scrape the ratings of each course
 // and save it to a json file
 //import node-fetch
-const fetch = import('node-fetch');
+const fetch = require('cross-fetch');
 const cheerio = require('cheerio');
 const fs = require('fs');
 
@@ -57,6 +57,52 @@ async function getCourseData(courseName) {
     }
 }
 
+//backend function, not used in the chatbot system
+async function getAllCoursesData(start, limit) {
+    const url = `https://api.coursera.org/api/courses.v1?start=${start}&limit=${limit}&fields=domainTypes,description,primaryLanguages,photoUrl,instructorIds`;
+    let response = await fetch(url);
+    let data = null
+    if (response.status !== 200) {
+        console.log(`Error: ${response.status}`);
+        return null;
+    } else {
+        data = await response.json();
+        data = data.elements;
+        if (data.length === 0) {
+            console.log(`Error: we couldn't retrieve courses data from coursera`);
+            
+        } else {
+            for (let i=0; i<data.length; i++){
+              console.log(`Course ${i}`);
+              if(data[i].primaryLanguages.includes('en')) {
+                let themes = [];
+                for (let j = 0; j < data[i].domainTypes.length; j++) {
+                    themes.push(data[i].domainTypes[j].domainId);
+                    themes.push(data[i].domainTypes[j].subdomainId);
+                }
+                data[i].themes = Array.from(new Set(themes)).join(',');
+                data[i].primaryLanguages = data[i].primaryLanguages.join(',');
+                data[i].instructorIds = data[i].instructorIds.join(',');
+                delete data[i].domainTypes;
+                delete data[i].courseType;
+                delete data[i].id;
+                data[i].url = `https://www.coursera.org/learn/${data.slug}`
+                const rating = await scrapeCourse(data[i]);
+                if (rating !== null) {
+                    data[i].rating = rating;
+                    data[i].tags = courseTags(data[i]);
+                    delete data[i].slug;
+                    data[i] = reorderCourse(data[i]);
+                }
+            }
+          }
+            
+        }
+        
+    }
+  return data.filter(course => course.rating != null && course.primaryLanguages.contains('en'))
+}
+
 // function to scrape the rating of one course, takes the course as an input and returns the rating
 async function scrapeCourse(course) {
     let response = await fetch(course.url);
@@ -66,6 +112,11 @@ async function scrapeCourse(course) {
     return parseFloat(rating.replace('stars', ''));
 }
 
+//backend function, not used in the chatbot system
+async function populateCoursesDB(start, limit) {
+  const courses = await getAllCoursesData(start, limit);
+  await saveData(courses);
+}
 // function to reorder courses object in the following order: name, description, themes, rating
 async function reorderCourse(course) {
     const courseOrder = {

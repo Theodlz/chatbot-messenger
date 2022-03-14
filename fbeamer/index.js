@@ -117,6 +117,7 @@ class FBeamer{
           json: payload
         }, (error, response, body) => {
           if(!error && response.statusCode === 200) {
+            
             resolve({
               mid: body.message_id
             });
@@ -158,6 +159,42 @@ class FBeamer{
         }
       }
       return this.sendMessage(obj);
+    }
+
+    web_url(id, title, url, image_url, messaging_type='RESPONSE'){
+      let obj = {
+        messaging_type,
+        recipient:{
+          id
+        },
+        message: {
+          attachment: {
+            type: "template",
+            payload: {
+              "template_type":"generic",
+              "elements":[
+                 {
+                  "title":title,
+                  "image_url":image_url,
+                  "default_action": {
+                    "type": "web_url",
+                    "url": url,
+                    "webview_height_ratio": "compact"
+                  },
+                   "buttons":[
+                     {
+                       "type":"web_url",
+                       "url": url,
+                       "title": "more info",
+                     }
+                   ]
+                },
+              ]
+            }
+          }
+        }
+      }
+    return this.sendMessage(obj);
     }
 }
 
