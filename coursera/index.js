@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 
-const {recommendFromCourseAndUser, recommendFromUser} = require('./coursera_recommender.js');
+const {recommendFromCourse, recommendFromUser, resetUser } = require('./coursera_recommender.js');
 const users = JSON.parse(fs.readFileSync('./coursera/data/users.json'));
 const courses = JSON.parse(fs.readFileSync('./coursera/data/courses.json'));
 
@@ -35,12 +35,12 @@ module.exports = (userID, nlpData) => {
         let intent = extractEntity(nlpData, 'intent');
         if(intent) {
           console.log(intent);
-          if(intent === 'recommendationFromCourseAndUser') {
+          if(intent === 'recommendationFromCourse') {
             let courseName = extractEntity(nlpData, 'course:course');
             console.log(courseName);
     
             try {
-              let result = await recommendFromCourseAndUser(userID, courseName, 5, courses, users);
+              let result = await recommendFromCourse(userID, courseName, 5, courses, users);
               console.log(result);
               if(result.status === 200) {
                   // fill an array with the courses
@@ -81,6 +81,19 @@ module.exports = (userID, nlpData) => {
                 console.log(e);
                 resolve([{type : 'text', content : "Sorry, it seems that we are having issues at the moment, please try again later."}]);
             }
+          } else if (intent === 'help') {
+            resolve([{type : 'text', content : "Welcome (back) !"},
+                     {type : 'text', content : "Here's how to use me:"},
+                     {type : 'text', content : "1. IF you are using me for the first time, start by giving me the name of a course you liked on coursera !"},
+                     {type : 'text', content : 'Example: "I liked Fundamentals of Reinforcement Learning, can you give me any recommendations ?" '},
+                     {type : 'text', content : '2. IF you used me before, you can ask the same question as above, which will recommend you 5 courses similar to this one, and add it to your profile.'},
+                     {type : 'text', content : '3. ALSO, you can ask: "Can you recommend me new courses ?", which will give your 5 recommendations of courses to attend to, based on your user profile.'},
+                     {type : 'text', content : '4. FINALLY, you can ask: "Reset my user profile please", which will reset your history of courses in your profile. You can use this if the recommendations we give you do not correspond to your interests anymore'},
+                     {type : 'text', content : "Have fun learning new things on Coursera !!! IF you need help again, just ask !"},
+                    ]);
+          } else if(intent==='resetUser') {
+            await resetUser(userID, users);
+            resolve([{type : 'text', content : "Your courses history has been emptied. Have fun giving us new ones, we hope we can give you even better recommendations this time!"}]);
           } else {
             resolve([{type : 'text', content : "Sorry, I don't understand your request, please try again(Not Implemented yet)."}]);
           }

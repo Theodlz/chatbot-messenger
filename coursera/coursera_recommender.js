@@ -40,6 +40,22 @@ async function addUpdateUser(id, courses, users) {
     saveUsers(users);
     return user;
 }
+
+function resetUser(id, users) {
+  var user = users.find(function(user) {
+        return user.id === id;
+    });
+  if (user) {
+    users.pop(user);
+    user.courses = [];
+    users.push(user);
+    saveUsers(users);
+    
+    return {"status": 200, "message": "Your user history has been emptied."};
+  } else {
+    return {"status": 400, "message": "This user doesn't exist yet, so he can't have a user history"};
+  }
+}
     
 // function to check if a course is in courses array using its name
 function courseExists(courseName, courses) {
@@ -113,7 +129,7 @@ function findSimilarCourses(courseList, courses, n) {
     return courseInfo;
 }
 
-async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
+async function recommendFromCourse(id, courseName, n, courses, users) {
     // check if course exists in courses array
     // if not, get the data from coursera api
     // add the course to courses array
@@ -128,7 +144,7 @@ async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
             // update user's list of courses
             let user = await addUpdateUser(id, [courseName], users);
             // find similar courses
-            let recommendations = await findSimilarCourses(user.courses, courses, n);
+            let recommendations = await findSimilarCourses([courseName], courses, n);
             return {"status": 200, "message": "Course added and recommendation's given", "recommendations": recommendations};
 
         } else {
@@ -138,7 +154,7 @@ async function recommendFromCourseAndUser(id, courseName, n, courses, users) {
         // update user's list of courses
         let user = await addUpdateUser(id, [courseName], users);
         // find similar courses
-        let recommendations = await findSimilarCourses(user.courses, courses, n);
+        let recommendations = await findSimilarCourses([courseName], courses, n);
         return {"status": 200, "message": "Course added and recommendations given", "recommendations": recommendations};
     }
 
@@ -162,6 +178,7 @@ async function recommendFromUser(id, n, courses, users) {
 
 // export the function recommend
 module.exports = {
-    recommendFromCourseAndUser,
-    recommendFromUser
+    recommendFromCourse,
+    recommendFromUser,
+    resetUser
 };
