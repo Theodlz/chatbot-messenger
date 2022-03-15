@@ -95,8 +95,10 @@ module.exports = (userID, nlpData) => {
             await resetUser(userID, users);
             resolve([{type : 'text', content : "Your courses history has been emptied. Have fun giving us new ones, we hope we can give you even better recommendations this time!"}]);
           } else {
-            resolve([{type : 'text', content : "Sorry, I don't understand your request, please try again(Not Implemented yet)."}]);
+            resolve([{type : 'text', content : "Sorry, I don't understand your request, please try again(Not Implemented yet, or Incomprehensible)."}]);
           }
+        } else {
+          resolve([{type : 'text', content : "Sorry, I don't understand your request, please try again(Not Implemented yet, or Incomprehensible)."}]);
         }
     });
 };

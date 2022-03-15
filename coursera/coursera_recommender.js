@@ -60,7 +60,7 @@ function resetUser(id, users) {
 // function to check if a course is in courses array using its name
 function courseExists(courseName, courses) {
     for (let i = 0; i < courses.length; i++) {
-        if (courses[i].name === courseName) {
+        if (courses[i].name.toLowerCase() === courseName.toLowerCase()) {
             return true;
         }
     }
@@ -69,7 +69,7 @@ function courseExists(courseName, courses) {
 
 async function getCourse(courseName, courses) {
     for (let i = 0; i < courses.length; i++) {
-        if (courses[i].name === courseName) {
+        if (courses[i].name.toLowerCase() === courseName.toLowerCase()) {
             return courses[i];
         }
     }
@@ -92,7 +92,7 @@ function cosineSimilarity(str1, str2) {
 function findSimilarCourses(courseList, courses, n) {
     let similarities = [];
     courseList.forEach(course => {
-        let courseIndex = courses.findIndex(c => c.name === course);
+        let courseIndex = courses.findIndex(c => c.name.toLowerCase() === course.toLowerCase());
         let similarity = new Array(courses.length);
         for (let i = 0; i < courses.length; i++) {
             
